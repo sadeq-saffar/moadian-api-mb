@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="content-0.0.29-jar-with-dependencies">
+    <CLASSES>
+      <root url="jar://F:/xgs/java/content-0.0.29-jar-with-dependencies.jar!/" />
+      <root url="jar://F:/xgs/java/tax-collect-data-sdk-2.0.0-jar-with-dependencies.jar!/" />
+      <root url="jar://F:/xgs/java/transfer-0.0.29-jar-with-dependencies.jar!/" />
+      <root url="jar://F:/xgs/java/utils-0.0.29-jar-with-dependencies.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
