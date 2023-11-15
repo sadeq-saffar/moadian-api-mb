@@ -7,12 +7,16 @@ import moadian.Moadian;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class RPCInvoiceServer {
 
     private static final String RPC_QUEUE_NAME = "invoice_queue";
-
-    public RPCInvoiceServer() throws IOException, TimeoutException {
+    Logger logger;
+    public RPCInvoiceServer(String baseUrl, Logger logger) throws IOException, TimeoutException {
+        this.logger = logger;
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
 
@@ -23,7 +27,8 @@ public class RPCInvoiceServer {
 
             channel.basicQos(1);
 
-            System.out.println(" [x] Awaiting RPC Invoice requests from " + RPC_QUEUE_NAME);
+//            System.out.println(" [x] Awaiting RPC Invoice requests from " + RPC_QUEUE_NAME);
+            logger.info(" [x] Awaiting RPC Invoice requests from " + RPC_QUEUE_NAME);
 
             Object monitor = new Object();
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -38,13 +43,17 @@ public class RPCInvoiceServer {
                     String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
                     DataRequest dataRequest  = gson.fromJson(message, DataRequest.class);
-                    Moadian moadian = new Moadian(dataRequest.getData().getUsername(), dataRequest.getData().getVendorName());
+                    Moadian moadian = new Moadian(dataRequest.getData().getUsername(), dataRequest.getData().getVendorName(),baseUrl, logger);
                     AsyncResponseModel rsp = moadian.sendInvoice(dataRequest.getData().getInvoice());
-                    System.out.println(rsp);
-                    System.out.println(" [.] Invoice Resp (" + message + ")");
+//                    System.out.println(rsp);
+                    logger.info(rsp.toString());
+
+//                    System.out.println(" [.] Invoice Resp (" + message + ")");
+                    logger.info(" [.] Invoice Resp (" + message + ")");
                     response = rsp;
                 } catch (RuntimeException e) {
-                    System.out.println(" [.] " + e);
+//                    System.out.println(" [.] " + e);
+                    logger.severe(" [.] " + e);
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, gson.toJson(response).getBytes(StandardCharsets.UTF_8));
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
@@ -62,6 +71,7 @@ public class RPCInvoiceServer {
                     try {
                         monitor.wait();
                     } catch (InterruptedException e) {
+                        logger.severe(e.getMessage());
                         e.printStackTrace();
                     }
                 }
