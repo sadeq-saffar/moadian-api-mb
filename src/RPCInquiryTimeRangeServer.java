@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import com.rabbitmq.client.*;
 import ir.gov.tax.tpis.sdk.content.dto.InquiryResultModel;
 import moadian.InquiryRequest;
+import moadian.InquiryTimeRangeRequest;
 import moadian.Moadian;
 
 import java.nio.charset.StandardCharsets;
@@ -11,15 +12,15 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-public class RPCInquiryServer {
+public class RPCInquiryTimeRangeServer {
 
-    private static final String RPC_QUEUE_NAME = "inquiry_queue";
-
+    private static final String RPC_QUEUE_NAME = "inquiry_time_range_queue";
     Logger logger;
-    public RPCInquiryServer(String baseUrl, Logger logger) throws Exception {
+    public RPCInquiryTimeRangeServer(String baseUrl, Logger logger) throws Exception {
         this.logger = logger;
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
+
 
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {
@@ -28,9 +29,8 @@ public class RPCInquiryServer {
 
             channel.basicQos(1);
 
-//            System.out.println(" [x] Awaiting RPC inquiry requests from " + RPC_QUEUE_NAME);
-            logger.info(" [x] Awaiting RPC inquiry requests from " + RPC_QUEUE_NAME);
-
+//            System.out.println(" [x] Awaiting RPC inquiry time range requests from " + RPC_QUEUE_NAME);
+            logger.info(" [x] Awaiting RPC inquiry time range requests from " + RPC_QUEUE_NAME);
 
             Object monitor = new Object();
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -46,18 +46,17 @@ public class RPCInquiryServer {
                 try {
                     String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
-                    InquiryRequest dataRequest  = gson.fromJson(message, InquiryRequest.class);
+                    InquiryTimeRangeRequest request  = gson.fromJson(message, InquiryTimeRangeRequest.class);
 
-                    Moadian moadian = new Moadian(dataRequest.getClientId(), dataRequest.getCompanyName(), baseUrl, logger);
+                    Moadian moadian = new Moadian(request.getClientId(), request.getCompanyName(), baseUrl, logger);
 
-                    List<InquiryResultModel> rsp = moadian.getInquiryByRef(dataRequest.getRef());
+                    List<InquiryResultModel> rsp = moadian.getInquiryByTimeRange(request.getStartDate(), request.getEndDate());
 //                    System.out.println(rsp);
                     logger.info(rsp.toString());
-
 //                    int n = Integer.parseInt(message);
 
-//                    System.out.println(" [.] Invoice Resp (" + message + ")");
-                    logger.info(" [.] Invoice Resp (" + message + ")");
+//                    System.out.println(" [.] Time Range Resp (" + message + ")");
+                    logger.info(" [.] Time Range Resp (" + message + ")");
                     response = rsp;
                 } catch (RuntimeException e) {
 //                    System.out.println(" [.] " + e);
