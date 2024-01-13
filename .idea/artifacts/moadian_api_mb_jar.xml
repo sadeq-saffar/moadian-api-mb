@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="moadian-api-mb:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/moadian_api_mb_jar</output-path>
+    <root id="root">
+      <element id="archive" name="moadian-api-mb.jar">
+        <element id="module-output" name="moadian-api-mb" />
+      </element>
+      <element id="library" level="project" name="content-0.0.29-jar-with-dependencies" />
+      <element id="library" level="project" name="amqp-client-5.6.0" />
+      <element id="library" level="project" name="gson-2.3.1" />
+    </root>
+  </artifact>
+</component>
