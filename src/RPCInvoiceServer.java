@@ -53,7 +53,7 @@ public class RPCInvoiceServer {
                     response = rsp;
                 } catch (RuntimeException e) {
 //                    System.out.println(" [.] " + e);
-                    logger.severe(" [.] " + e);
+                    logger.severe(" [.] Invoice Resp " + e.getMessage());
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, gson.toJson(response).getBytes(StandardCharsets.UTF_8));
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

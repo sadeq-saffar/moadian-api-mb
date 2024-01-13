@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Logger logger = Logger.getLogger(Main.class.getName());
         FileHandler fileHandler = new FileHandler("myLog.log", false);
+        fileHandler.setEncoding("UTF-8");
         fileHandler.setFormatter(new CustomLogFormatter());
 
         logger.addHandler(fileHandler);

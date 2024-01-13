@@ -60,7 +60,7 @@ public class RPCInquiryTimeRangeServer {
                     response = rsp;
                 } catch (RuntimeException e) {
 //                    System.out.println(" [.] " + e);
-                    logger.severe(" [.] " + e);
+                    logger.severe(" [.] Time Range Resp " + e.getLocalizedMessage());
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, gson.toJson(response).getBytes(StandardCharsets.UTF_8));
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

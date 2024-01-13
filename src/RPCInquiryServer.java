@@ -57,11 +57,11 @@ public class RPCInquiryServer {
 //                    int n = Integer.parseInt(message);
 
 //                    System.out.println(" [.] Invoice Resp (" + message + ")");
-                    logger.info(" [.] Invoice Resp (" + message + ")");
+                    logger.info(" [.] Inquiry Resp (" + message + ")");
                     response = rsp;
                 } catch (RuntimeException e) {
 //                    System.out.println(" [.] " + e);
-                    logger.severe(" [.] " + e);
+                    logger.severe(" [.] Inquiry Resp   " + e.getLocalizedMessage());
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, gson.toJson(response).getBytes(StandardCharsets.UTF_8));
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
