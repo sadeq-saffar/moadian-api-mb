@@ -10,6 +10,8 @@ import ir.gov.tax.tpis.sdk.transfer.dto.AsyncResponseModel;
 import ir.gov.tax.tpis.sdk.transfer.impl.signatory.SignatoryFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,7 +32,7 @@ public class Moadian {
         try {
             init();
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            logger.severe("init()" + e.getMessage() );
             throw new RuntimeException(e);
         }
 
@@ -38,9 +40,22 @@ public class Moadian {
 
     private void init() throws IOException {
         //https://tp.tax.gov.ir/
+        File pkcs8PrivateKey = new File("C:\\keys\\" + companyName + "private.txt");
+//        try {w
+//            // Read the file content
+//            String fileContent = new String(Files.readAllBytes(pkcs8PrivateKey.toPath()), StandardCharsets.UTF_8);
+//
+//            // Print or process the file content as needed
+////            System.out.println("File Content:\n" + fileContent);
+////            logger.info("File Content:\n" + fileContent);
+//        } catch (Exception e) {
+//            logger.info("Reading File Content error is:\n" + e.getLocalizedMessage());
+//            e.printStackTrace();
+//        }
         apiConfig = new ApiConfig().baseUrl(baseUrl).transferSignatory(
                 SignatoryFactory.getInstance().createPKCS8Signatory(
-                        new File("C:\\keys\\"+companyName+"private.txt"), null));
+                        pkcs8PrivateKey, null));
+        logger.info("init - apiConfig" + apiConfig);
         TransferApi transferApi = new ObjectTransferApiImpl(apiConfig);
         taxApi = new DefaultTaxApiClient(transferApi, clientId);
     }
@@ -74,5 +89,7 @@ public class Moadian {
         return responseModel;
     }
 
-
+    public ApiConfig getApiConfig() {
+        return apiConfig;
+    }
 }

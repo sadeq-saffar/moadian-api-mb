@@ -42,11 +42,19 @@ public class RPCInvoiceServer {
                 try {
                     String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
 
+                    logger.info("Input is :  " + message);
+
                     DataRequest dataRequest  = gson.fromJson(message, DataRequest.class);
+                    logger.info("dataRequest is :  " + dataRequest.toString());
+                    logger.info("Moadian Username is :  " + dataRequest.getData().getUsername() );
+                    logger.info("Moadian VendorName is :  " + dataRequest.getData().getVendorName() );
+                    logger.info("Moadian baseUrl is :  " + baseUrl );
+
                     Moadian moadian = new Moadian(dataRequest.getData().getUsername(), dataRequest.getData().getVendorName(),baseUrl, logger);
+                    logger.info("moadian apiConfig is :  " + moadian.getApiConfig() );
                     AsyncResponseModel rsp = moadian.sendInvoice(dataRequest.getData().getInvoice());
 //                    System.out.println(rsp);
-                    logger.info(rsp.toString());
+                    logger.info("rsp " + rsp.toString());
 
 //                    System.out.println(" [.] Invoice Resp (" + message + ")");
                     logger.info(" [.] Invoice Resp (" + message + ")");
