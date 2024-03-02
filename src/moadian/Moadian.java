@@ -62,19 +62,19 @@ public class Moadian {
 
     public List<InquiryResultModel> getInquiryTime(String time){
         taxApi.requestToken();
-//        this.taxApi.getServerInformation();
+        this.taxApi.getServerInformation();
 
         return taxApi.inquiryByTime(time);
     }
     public List<InquiryResultModel> getInquiryByRef(String ref){
-        taxApi.requestToken();
-//        this.taxApi.getServerInformation();
+        this.taxApi.requestToken();
+        this.taxApi.getServerInformation();
 
-        return taxApi.inquiryByReferenceId(Collections.singletonList(ref));
+        return this.taxApi.inquiryByReferenceId(Collections.singletonList(ref));
     }
     public List<InquiryResultModel> getInquiryByTimeRange(String startDate, String toDate){
         taxApi.requestToken();
-//        this.taxApi.getServerInformation();
+        this.taxApi.getServerInformation();
         return taxApi.inquiryByTimeRange(startDate, toDate);
     }
 
@@ -84,7 +84,7 @@ public class Moadian {
         AsyncResponseModel responseModel;
         responseModel = taxApi.sendMyInvoices(Collections.singletonList(invoice));
 //        System.out.println(responseModel.getResult().get(0).getReferenceNumber());
-        logger.info(responseModel.getResult().get(0).getReferenceNumber());
+        logger.info("ReferenceNumber" + responseModel.getResult().get(0).getReferenceNumber());
 
         return responseModel;
     }

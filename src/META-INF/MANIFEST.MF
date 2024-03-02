@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Main-Class: Main
-Class-Path: content-0.0.29-jar-with-dependencies.jar tax-collect-data-sd
- k-2.0.0-jar-with-dependencies.jar transfer-0.0.29-jar-with-dependencies
- .jar utils-0.0.29-jar-with-dependencies.jar amqp-client-5.6.0.jar amqp-
- client-5.15.0.jar slf4j-api-1.7.25.jar gson-2.3.1.jar
+Class-Path: content-0.0.32-jar-with-dependencies.jar transfer-0.0.32-jar
+ -with-dependencies.jar utils-0.0.32-jar-with-dependencies.jar amqp-clie
+ nt-5.6.0.jar amqp-client-5.15.0.jar slf4j-api-1.7.25.jar gson-2.3.1.jar
 

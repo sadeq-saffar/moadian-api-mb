@@ -45,23 +45,25 @@ public class RPCInvoiceServer {
                     logger.info("Input is :  " + message);
 
                     DataRequest dataRequest  = gson.fromJson(message, DataRequest.class);
-                    logger.info("dataRequest is :  " + dataRequest.toString());
-                    logger.info("Moadian Username is :  " + dataRequest.getData().getUsername() );
-                    logger.info("Moadian VendorName is :  " + dataRequest.getData().getVendorName() );
-                    logger.info("Moadian baseUrl is :  " + baseUrl );
+
+//                    logger.info("dataRequest is :  " + dataRequest.toString());
+//                    logger.info("Moadian Username is :  " + dataRequest.getData().getUsername() );
+//                    logger.info("Moadian VendorName is :  " + dataRequest.getData().getVendorName() );
+//                    logger.info("Moadian baseUrl is :  " + baseUrl );
 
                     Moadian moadian = new Moadian(dataRequest.getData().getUsername(), dataRequest.getData().getVendorName(),baseUrl, logger);
-                    logger.info("moadian apiConfig is :  " + moadian.getApiConfig() );
+//                    logger.info("moadian apiConfig is :  " + moadian.getApiConfig() );
                     AsyncResponseModel rsp = moadian.sendInvoice(dataRequest.getData().getInvoice());
-//                    System.out.println(rsp);
-                    logger.info("rsp " + rsp.toString());
+                    System.out.println(rsp);
+                    logger.info("rsp:" + gson.toJson(rsp));
 
 //                    System.out.println(" [.] Invoice Resp (" + message + ")");
-                    logger.info(" [.] Invoice Resp (" + message + ")");
+//                    logger.info(" [.] Invoice Resp (" + message + ")");
                     response = rsp;
                 } catch (RuntimeException e) {
 //                    System.out.println(" [.] " + e);
-                    logger.severe(" [.] Invoice Resp " + e.getMessage());
+                    e.printStackTrace();
+                    logger.severe(" [.] Invoice Error is : " + e.getMessage());
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, gson.toJson(response).getBytes(StandardCharsets.UTF_8));
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
